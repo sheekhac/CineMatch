@@ -34,11 +34,13 @@ if st.session_state.started:
         st.session_state.genre = "Horror"
 
 if st.session_state.genre:
-    st.write(f"Great choice! Now, let's narrow it down a bit more. How niche would you like the movie to be?")
+    st.write("Great choice! Here are some movies you might like:")
 
-    st.button("Popular")
-    st.button("Highly rated")
-    st.button("Underrated")
+    genre_movies = movies[
+        movies["genres"].str.contains(st.session_state.genre, na=False)
+    ]
 
-st.write("MovieLens loaded successfully!")
-st.write(movies.head())
+    st.write(genre_movies[["title", "genres"]].head(10))
+
+# implement ratings and niche filters later 
+# move filtering logic into recommender.py later 

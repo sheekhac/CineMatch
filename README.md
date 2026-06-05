@@ -24,7 +24,6 @@ The application then recommends movies and explains why they were selected.
 This project uses the MovieLens Small Dataset.
 
 Files currently used:
-
 - `movies.csv`
 - `ratings.csv`
 
@@ -45,3 +44,9 @@ MovieLens provides movie titles, genres, and user ratings which are used to gene
 - Movie posters
 - Improved user interface
 - Deployment to the web
+
+## Challenges Encountered
+
+## Reflections
+
+## Room for improvement/optimisation
