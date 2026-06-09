@@ -1,6 +1,8 @@
 import streamlit as st
 import pandas as pd
 
+from recommender import get_movies_by_genre
+
 movies = pd.read_csv("data/movies.csv")
 ratings = pd.read_csv("data/ratings.csv")
 
@@ -36,9 +38,7 @@ if st.session_state.started:
 if st.session_state.genre:
     st.write("Great choice! Here are some movies you might like:")
 
-    genre_movies = movies[
-        movies["genres"].str.contains(st.session_state.genre, na=False)
-    ]
+    genre_movies = get_movies_by_genre(movies, st.session_state.genre)
 
     st.write(genre_movies[["title", "genres"]].head(10))
 
