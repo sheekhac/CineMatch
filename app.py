@@ -1,16 +1,20 @@
 import streamlit as st
 import pandas as pd
-
-from recommender import get_movies_by_genre
+from recommender import prepare_movie_data, get_recommendations
 
 movies = pd.read_csv("data/movies.csv")
 ratings = pd.read_csv("data/ratings.csv")
+
+movies_with_ratings = prepare_movie_data(movies, ratings)
 
 if "started" not in st.session_state:
     st.session_state.started = False
 
 if "genre" not in st.session_state:
     st.session_state.genre = None
+
+if "preference" not in st.session_state:
+    st.session_state.preference = None
 
 st.title("CineMatch 🎬")
 st.write("Don't know what to watch? Let me help find the perfect movie for you!")
@@ -36,11 +40,27 @@ if st.session_state.started:
         st.session_state.genre = "Horror"
 
 if st.session_state.genre:
-    st.write("Great choice! Here are some movies you might like:")
+    st.write("Great choice! Now, let's narrow it down a bit more.")
+    st.write("How niche would you like the movie to be?")
 
-    genre_movies = get_movies_by_genre(movies, st.session_state.genre)
+    if st.button("Popular"):
+        st.session_state.preference = "Popular"
 
-    st.write(genre_movies[["title", "genres"]].head(10))
+    if st.button("Highly Rated"):
+        st.session_state.preference = "Highly Rated"
 
-# implement ratings and niche filters later 
-# move filtering logic into recommender.py later 
+    if st.button("Underrated"):
+        st.session_state.preference = "Underrated"
+
+if st.session_state.genre and st.session_state.preference:
+    recommendations = get_recommendations(
+        movies_with_ratings,
+        st.session_state.genre,
+        st.session_state.preference
+    )
+
+    st.write("### Recommended Movies")
+
+    st.write(
+        recommendations[["title", "genres", "average_rating", "rating_count"]]
+    )
